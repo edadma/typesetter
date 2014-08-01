@@ -10,7 +10,6 @@ import java.io._
 
 object TypesetterTest extends MainFrame with App
 {
-	val MARGIN = 5
 	val t = new Typesetter
 	
 	val fs = System.getProperties.getProperty( "file.separator" )
@@ -146,14 +145,13 @@ object TypesetterTest extends MainFrame with App
 		new Panel
 		{
 			background = WHITE
-			preferredSize = new Dimension( 800, 600 )
+			preferredSize = new Dimension( 1280, 600 )
 			
 			override def paint( g: Graphics2D )
 			{
-				println( g.getDeviceConfiguration.getNormalizingTransform )
 				super.paint( g )
 				g.setRenderingHint( KEY_ANTIALIASING, VALUE_ANTIALIAS_ON )
-				p.draw( g, MARGIN, MARGIN )
+				p.draw( g, 0, 0 )
 //				p.box( g, MARGIN, MARGIN, CYAN )
 			}
 		}
