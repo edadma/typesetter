@@ -14,7 +14,7 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "1.0.1"
 
 publishMavenStyle := true
 
-publishTo := Some( Resolver.sftp( "private", "hyperreal.ca", "/var/www/maven2" ) )
+publishTo := Some( Resolver.sftp( "private", "hyperreal.ca", "/var/www/hyperreal.ca/html/maven2" ) )
 
 publishArtifact in Test := false
 
