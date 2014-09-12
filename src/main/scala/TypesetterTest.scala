@@ -19,32 +19,32 @@ object TypesetterTest extends MainFrame with App
 //	println( t.dimen("2parindent") )
 //	t.font( Font(null, fonts + "GentiumPlus-1.510" + fs + "GentiumPlus-R.ttf", "plain", 30) )
 
-//	t.vbox
-//	t.hbox
-//	t text "line 1"
-//	t.end
-//	t.vskip( 5, 0, 0 )
-//	t.hrule( 1 )
-//	t.vskip( 5, 0, 0 )
-//	t.hbox
-//	t text "line 2"
-//	t.end
+// 	t.vbox
+// 	t.hbox
+// 	t text "line 1"
+// 	t.end
+// 	t.vskip( 5, 0, 0 )
+// 	t.hrule( 1 )
+// 	t.vskip( 5, 0, 0 )
+// 	t.hbox
+// 	t text "line 2"
+// 	t.end
 	
 	t.vertical
-//	t text "framed"
-//	t.space
-//	t.frame( "text items", 3, 1 )
-//	t.space
-//	t shift ("is", -5)
-//	t.hrule( 10, 0, 5 )
-//	t.space
-//	t.list
-//	t text "/"
-//	t.rlap( t.arg )
-//	t text "="
-//	t.space
-//	t.underline( "cool" )
-//	t.par
+	t text "framed"
+	t.space
+	t.frame( "text items", 3, 1 )
+	t.space
+	t shift ("is", -5)
+	t.hrule( 10, 0, 5 )
+	t.space
+	t.list
+	t text "/"
+	t.rlap( t.arg )
+	t text "="
+	t.space
+	t.underline( "cool" )
+	t.par
 //
 //	t text "moved"
 //	t.space
@@ -71,8 +71,9 @@ object TypesetterTest extends MainFrame with App
 //	t hrule 1
 //	t vskip 5
 
-//	t text "This is a very very very very very very very very very very very very very very very very very very very boring test."
-//	t.par
+	t.raggedright
+	t text "This is a very very very very very very very very very very very very very very very very very very very very boring test."
+	t.par
 //	
 //	t.vbox
 //	t.variable( 'hsize, 600 )
@@ -86,41 +87,39 @@ object TypesetterTest extends MainFrame with App
 //	t.end
 //	t.end
 //
-//	t text "This is a very very very very very very very very very very very very very very very very very very very boring test."
-//	t.par
-	
-//	t.list
-//	t text "1."
-//	t.item( t.arg )
-//	t text "first item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-//	
-//	t.list
-//	t text "a)"
-//	t.itemitem( t.arg )
-//	t text "first sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-//	
-//	t.list
-//	t text "b)"
-//	t.itemitem( t.arg )
-//	t text "second sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-//
-//	t.list
-//	t text "2."
-//	t.item( t.arg )
-//	t text "second item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-	
-	t text """
-			You don't know about me without you have read a book by the name of
-			``The Adventures of Tom Sawyer;'' but that ain't no matter. That book
-			was made by Mr. Mark Twain, and he told the truth, mainly. There was
-			things which he stretched, but mainly he told the truth. That is
-			nothing. I never seen anybody but lied one time or another, without it
-			was Aunt Polly, or the widow, or maybe Mary. Aunt Polly---Tom's Aunt
-			Polly, she is---and Mary, and the Widow Douglas is all told about in
-			that book, which is mostly a true book, with some stretchers, as I
-			said before.
-		"""
-	t.par
+// 	t.list
+// 	t text "1."
+// 	t.item( t.arg )
+// 	t text "first item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
+// 	
+// 	t.list
+// 	t text "a)"
+// 	t.itemitem( t.arg )
+// 	t text "first sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
+// 	
+// 	t.list
+// 	t text "b)"
+// 	t.itemitem( t.arg )
+// 	t text "second sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
+// 
+// 	t.list
+// 	t text "2."
+// 	t.item( t.arg )
+// 	t text "second item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
+// 	
+// 	t text """
+// 			You don't know about me without you have read a book by the name of
+// 			``The Adventures of Tom Sawyer;'' but that ain't no matter. That book
+// 			was made by Mr. Mark Twain, and he told the truth, mainly. There was
+// 			things which he stretched, but mainly he told the truth. That is
+// 			nothing. I never seen anybody but lied one time or another, without it
+// 			was Aunt Polly, or the widow, or maybe Mary. Aunt Polly---Tom's Aunt
+// 			Polly, she is---and Mary, and the Widow Douglas is all told about in
+// 			that book, which is mostly a true book, with some stretchers, as I
+// 			said before.
+// 		"""
+ 	t.par
+	t.vfil
 	
 //	t.draw( None )
 //	

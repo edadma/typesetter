@@ -476,6 +476,14 @@ class Typesetter
 	// simple format support
 	//
 	
+	def raggedright
+	{
+		variable( 'rightskip, Glue(0) )
+		variable( 'spaceskip, glueVariable('spaceskip).fix )
+		variable( 'cspaceskip, glueVariable('cspaceskip).fix )
+		variable( 'xspaceskip, glueVariable('xspaceskip).fix )
+	}
+	
 	def hang
 	{
 		variable( 'hangindent, numberVariable('parindent) )

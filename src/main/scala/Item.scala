@@ -195,6 +195,8 @@ case class Glue( natural: Double, plus: Double, order: Int, minus: Double )
 	def mul( a: Double ) = Glue( a*natural, plus, order, minus )
 	
 	def sub( s: Double ) = Glue( natural - s, plus, order, minus )
+	
+	def fix = Glue( natural, 0, order, 0 )
 }
 
 object Glue
