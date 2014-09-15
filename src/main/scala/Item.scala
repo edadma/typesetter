@@ -312,6 +312,23 @@ class VFil extends Fil
 	val isHorizontal = false
 }
 
+abstract class Fill( val order: Int = 2 ) extends FillSkip
+{
+	val plus = 1D
+	
+	val minus = 0D
+}
+
+class HFill extends Fill
+{
+	val isHorizontal = true
+}
+
+class VFill extends Fill
+{
+	val isHorizontal = false
+}
+
 abstract class Filneg( val order: Int = 1 ) extends FillSkip
 {
 	val plus = -1D

@@ -271,6 +271,10 @@ class Typesetter
 	
 	def vfil = addVertical( new VFil )
 	
+	def hfill = addHorizontal( new HFill )
+	
+	def vfill = addVertical( new VFill )
+	
 	def hfilneg = addHorizontal( new HFilneg )
 	
 	def vfilneg = addVertical( new VFilneg )
