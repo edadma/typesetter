@@ -2,32 +2,42 @@ name := "Typesetter"
 
 version := "0.4"
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.11.6"
 
 scalacOptions ++= Seq( "-deprecation", "-feature", "-language:postfixOps", "-language:implicitConversions", "-language:existentials" )
 
 incOptions := incOptions.value.withNameHashing( true )
 
-organization := "org.lteditor"
+organization := "ca.hyperreal"
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "1.0.1"
 
-publishMavenStyle := true
+import AssemblyKeys._
 
-publishTo := Some( Resolver.sftp( "private", "hyperreal.ca", "/var/www/hyperreal.ca/maven2" ) )
+assemblySettings
+
+mainClass in assembly := Some( "ca.hyperreal.sscheme.Main" )
+
+jarName in assembly := name.value + "-" + version.value + ".jar"
+
+
+seq(bintraySettings:_*)
+
+
+publishMavenStyle := true
 
 publishArtifact in Test := false
 
 pomIncludeRepository := { _ => false }
 
-licenses := Seq("GPL" -> url("http://opensource.org/licenses/GPL-3.0"))
+licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-homepage := Some(url("https://github.com/LTEditor/typesetter"))
+homepage := Some(url("https://github.com/edadma/typesetter"))
 
 pomExtra := (
   <scm>
-    <url>git@github.com:LTEditor/typesetter.git</url>
-    <connection>scm:git:git@github.com:LTEditor/typesetter.git</connection>
+    <url>git@github.com:edadma/typesetter.git</url>
+    <connection>scm:git:git@github.com:edadma/typesetter.git</connection>
   </scm>
   <developers>
     <developer>
