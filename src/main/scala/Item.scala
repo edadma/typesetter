@@ -1,4 +1,4 @@
-package typesetter
+package xyz.hyperreal.typesetter
 
 import java.awt.{AlphaComposite, Graphics2D, Font => JFont, Color, Shape, BasicStroke, Stroke}
 import java.awt.image.BufferedImage

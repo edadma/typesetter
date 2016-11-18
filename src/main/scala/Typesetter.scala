@@ -1,4 +1,4 @@
-package typesetter
+package xyz.hyperreal.typesetter
 
 import java.awt.{Font => JFont, Color, GraphicsEnvironment, AlphaComposite, Stroke, BasicStroke}
 import java.awt.Font._

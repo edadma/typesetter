@@ -1,4 +1,4 @@
-package typesetter
+package xyz.hyperreal.typesetter
 
 import java.awt.RenderingHints._
 import java.awt.Color._

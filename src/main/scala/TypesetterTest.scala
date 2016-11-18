@@ -1,4 +1,4 @@
-package typesetter
+package xyz.hyperreal.typesetter
 
 import scala.swing._
 import java.awt.RenderingHints._
