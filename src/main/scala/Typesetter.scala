@@ -435,15 +435,13 @@ class Typesetter
 			hspace( numberVariable('parindent) )
 	}
 	
-	def accent( s: String, combaccent: String, accentmap: Map[Char, Char] ) =
-	{
+	def accent( s: String, combaccent: String, accentmap: Map[Char, Char] ) = {
 	val first = s.charAt( 0 )
 	val rest = s.substring( 1 )
 	
-		accentmap.get( s.charAt(0) ) match
-		{
-		case Some( newchar ) => newchar + rest
-		case None => first + combaccent + rest
+		accentmap.get( s.charAt(0) ) match {
+		case Some( newchar ) => s"$newchar$rest"
+		case None => s"$first$combaccent$rest"
 		}
 	}
 	
@@ -596,11 +594,9 @@ class Typesetter
 		add( new TranslucentBox(b, margin, .5) )
 	}
 	
-	def halign( size: Size, table: List[List[List[Item]]], margin: Glue, intercolumn: List[Glue] )
-	{
-		if (!table.isEmpty)
-		{
-		val cols = table.aggregate( 0 )( _ max _.length, _ max _ )
+	def halign( size: Size, table: List[List[List[Item]]], margin: Glue, intercolumn: List[Glue] ): Unit = {
+		if (!table.isEmpty) {
+		val cols = table.foldLeft( 0 )( _ max _.length )
 		val buf = new ListBuffer[List[List[Item]]]
 		
 			for (r <- table)
@@ -822,7 +818,7 @@ object Typesetter
 	{
 	val first = s.charAt( 0 )
 	val rest = s.substring( 1 )
-	lazy val combining = first + a + rest
+	lazy val combining = s"$first$a$rest"
 	
 		if (first == 'y' && a == `COMBINING DIAERESIS`)
 			`LATIN SMALL LETTER Y WITH DIAERESIS` + rest
@@ -834,12 +830,12 @@ object Typesetter
 				p.zipWithIndex find (e => e._1 == a) match
 				{
 				case None => combining
-				case Some( (_, index) ) => (s + (if (first.isLower) 0x20 else 0) + index).toChar + rest
+				case Some( (_, index) ) => s"{(s + (if (first.isLower) 0x20 else 0) + index).toChar}$rest"
 				}
 			}
 	}
 	
-	def macronAccent( s: String ) = s.charAt( 0 ) + `COMBINING MACRON` + s.substring( 1 )
+	def macronAccent( s: String ) = s"${s.charAt( 0 )}${`COMBINING MACRON`}${s.substring( 1 )}"
 }
 
 class TypesetterException( m: String ) extends Exception( m )

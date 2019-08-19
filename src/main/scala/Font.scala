@@ -16,7 +16,7 @@ import collection.mutable.{ListBuffer, HashMap}
 object Font
 {
 	private val jfontMap = new HashMap[String, JFont]
-	private val families = Set( GraphicsEnvironment.getLocalGraphicsEnvironment.getAvailableFontFamilyNames: _* )
+	private val families = Set( GraphicsEnvironment.getLocalGraphicsEnvironment.getAvailableFontFamilyNames.toIndexedSeq: _* )
 	
 	private val styleMap =
 		Map(

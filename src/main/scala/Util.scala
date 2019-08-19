@@ -74,11 +74,11 @@ object Util
 		}	
 	}
 	
-	def maxWidth( l: List[List[Item]] ) = l.aggregate( 0D )( _ max width(_), _ max _ )
+	def maxWidth( l: List[List[Item]] ) = l.foldLeft( 0D )( _ max width(_) )
 	
-	def width( l: List[Item] ) = l.aggregate( 0D )( (a, b) => a + (if (b.isMeasurable) b.asMeasurable.width else 0), _ + _ )
+	def width( l: List[Item] ) = l.foldLeft( 0D )( (a, b) => a + (if (b.isMeasurable) b.asMeasurable.width else 0) )
 	
-	def maxHeight( l: List[List[Item]] ) = l.aggregate( 0D )( _ max height(_), _ max _ )
+	def maxHeight( l: List[List[Item]] ) = l.foldLeft( 0D )( _ max height(_) )
 	
-	def height( l: List[Item] ) = l.aggregate( 0D )( (a, b) => a + (if (b.isMeasurable) b.asMeasurable.height else 0), _ + _ )
+	def height( l: List[Item] ) = l.foldLeft( 0D )( (a, b) => a + (if (b.isMeasurable) b.asMeasurable.height else 0) )
 }

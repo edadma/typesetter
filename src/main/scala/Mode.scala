@@ -129,7 +129,7 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 {
 	def isAllowed( e: Item ) = true
 	
-	private def skip[A]( s: Seq[A], from: Int, pred: A => Boolean ): Int =
+	private def skip[A]( s: collection.Seq[A], from: Int, pred: A => Boolean ): Int =
 	{
 		require( from >= 0 )
 		
@@ -155,10 +155,10 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 	
 	val lines = new ArrayBuffer[ArrayBuffer[Item]]
 //	val breaks = new ArrayBuffer[Int]
-	val view = buf.view.asInstanceOf[collection.SeqView[Item, ArrayBuffer[Item]]]
+	val view = buf.view.asInstanceOf[collection.SeqView[ArrayBuffer[Item]]]
 	var counter = 1
 	
-		def line( l: Seq[Item] )
+		def line( l: collection.Seq[Item] )
 		{
 		var width = 0D
 		
@@ -171,7 +171,7 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 				else
 					0
 			
-				def chunk( s: Seq[Item] ): Seq[Item] =
+				def chunk( s: collection.Seq[Item] ): collection.Seq[Item] =
 				{
 				val end = skip[Item](s, skip[Item](s, 0, _.isInstanceOf[HSkip]), !_.isInstanceOf[HSkip])
 				val (a, b) = s.toIndexedSeq splitAt end
@@ -214,7 +214,7 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 			}
 		}
 		
-		line( view )
+		line( buf ) // used to be 'view'
 		lines( lines.length - 1 ).insert( lines(lines.length - 1).length - 1, new HSkip(parfillskip) )
 		
 		env.modePop

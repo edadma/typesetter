@@ -6,7 +6,7 @@ import java.awt.Font._
 import java.awt.geom._
 import java.io._
 
-import swing._
+import swing.{Font => SF, _}
 
 
 object TypesetterBoxTest extends MainFrame with App
@@ -16,9 +16,9 @@ object TypesetterBoxTest extends MainFrame with App
 	
 	val fs = System.getProperties.getProperty( "file.separator" )
 	val home = System.getProperties.getProperty( "user.home" )
-	val fonts = home + fs + "Dropbox" + fs + "Typography" + fs + "Fonts" + fs
+	val fonts = home + fs + "dev" + fs + "typesetter" + fs + "fonts" + fs
 
-	t.font( Font(null, fonts + "GentiumPlus-1.510" + fs + "GentiumPlus-R.ttf", "plain", 300) )
+	t.font( Font(null, fonts + "GentiumPlus-R.ttf", "plain", 300) )
 	t color GRAY
 	t.list
 	t.glyphs( "p", true )
