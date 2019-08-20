@@ -146,8 +146,7 @@ object TypesetterTest extends MainFrame with App
 			background = WHITE
 			preferredSize = new Dimension( 1280, 600 )
 			
-			override def paint( g: Graphics2D )
-			{
+			override def paint( g: Graphics2D ) = {
 				super.paint( g )
 				g.setRenderingHint( KEY_ANTIALIASING, VALUE_ANTIALIAS_ON )
 				p.draw( g, 0, 0 )

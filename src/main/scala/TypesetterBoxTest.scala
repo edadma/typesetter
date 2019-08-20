@@ -32,10 +32,8 @@ object TypesetterBoxTest extends MainFrame with App
 			background = WHITE
 			preferredSize = new Dimension( 800, 600 )
 			
-			override def paint( g: Graphics2D )
-			{
-				def cross( x: Double, y: Double )
-				{
+			override def paint( g: Graphics2D ) = {
+				def cross( x: Double, y: Double ) = {
 					g setColor RED
 					g.draw( new Line2D.Double(x, y - C, x, y + C) )
 					g.draw( new Line2D.Double(x - C, y, x + C, y) )

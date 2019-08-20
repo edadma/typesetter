@@ -94,9 +94,9 @@ abstract class VerticalBoxMode( env: Typesetter ) extends ListMode( env ) with B
 
 	protected def verticalSpacing( e: Item, env: Typesetter )
 	{
-	val baselineskip = env.glueVariable( 'baselineskip )
-	val lineskip = env.glueVariable( 'lineskip )
-	val lineskiplimit = env.numberVariable( 'lineskiplimit )
+	val baselineskip = env.glueVariable( Symbol( "baselineskip" ))
+	val lineskip = env.glueVariable( Symbol( "lineskip" ))
+	val lineskiplimit = env.numberVariable( Symbol( "lineskiplimit" ))
 
 		if (e.isBox && lastbox != null && !graphics)
 		{
@@ -118,11 +118,10 @@ class InternalVerticalMode( size: Size, baseline: Int, env: Typesetter ) extends
 	def box = new VBox( list, size )
 }
 
-class VerticalMode( env: Typesetter ) extends VerticalBoxMode( env )
-{
+class VerticalMode( env: Typesetter ) extends VerticalBoxMode( env ) {
 	def isAllowed( e: Item ) = true
 	
-	def box = new VBox( list, if (env.numberVariable('vsize) < 0) Natural else To(env.numberVariable('vsize)) )
+	def box = new VBox( list, if (env.numberVariable(Symbol( "vsize" )) < 0) Natural else To(env.numberVariable(Symbol( "vsize" )) ) )
 }
 
 class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
@@ -145,12 +144,12 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 	{
 		if (buf isEmpty) return//sys.error( "par: empty line" )
 	
-	val leftskip = env.glueVariable('leftskip)
-	val rightskip = env.glueVariable('rightskip)
-	val parfillskip = env.glueVariable('parfillskip)
-	val hangindent = env.numberVariable('hangindent)
-	val hangafter = env.integerVariable('hangafter)
-	val linewidth = env.numberVariable('hsize)
+	val leftskip = env.glueVariable(Symbol("leftskip") )
+	val rightskip = env.glueVariable(Symbol( "rightskip") )
+	val parfillskip = env.glueVariable(Symbol( "parfillskip") )
+	val hangindent = env.numberVariable(Symbol( "hangindent") )
+	val hangafter = env.integerVariable(Symbol( "hangafter") )
+	val linewidth = env.numberVariable(Symbol( "hsize") )
 	val maxwidth = linewidth - leftskip.natural - rightskip.natural
 	
 	val lines = new ArrayBuffer[ArrayBuffer[Item]]
@@ -214,7 +213,7 @@ class HorizontalMode( env: Typesetter ) extends HorizontalListMode( env )
 			}
 		}
 		
-		line( buf ) // used to be 'view'
+		line( buf ) // used to be Symbol( "vie" )'
 		lines( lines.length - 1 ).insert( lines(lines.length - 1).length - 1, new HSkip(parfillskip) )
 		
 		env.modePop
@@ -320,7 +319,7 @@ class PathMode( env: Typesetter ) extends BoxMode
 		{
 			if (oper ne null) error( "no operation expected" )
 			
-			if (initial && s != "move") error( "expected 'move' operation" )
+			if (initial && s != "move") sys.error( "expected 'mov' operation" )
 			
 			if (s == "close")
 			{

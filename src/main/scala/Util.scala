@@ -28,8 +28,7 @@ object Util
 		ret
 	}
 	
-	def findLigatures( s: String, ligatures: List[(String, String)], exceptions: List[String] )( normal: String => Unit )( ligature: (String, String) => Unit )
-	{
+	def findLigatures( s: String, ligatures: List[(String, String)], exceptions: List[String] )( normal: String => Unit )( ligature: (String, String) => Unit ): Unit = {
 		def scan: Option[(Int, String, String)] =
 		{
 		var i = 0

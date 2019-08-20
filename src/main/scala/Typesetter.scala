@@ -32,16 +32,15 @@ class Typesetter
 	
 	def level = variablesStack.size
 	
-	def variable( key: Symbol, value: Any )
-	{
-		if (key == 'font)
+	def variable( key: Symbol, value: Any ): Unit = {
+		if (key == Symbol( "font" ))
 		{
 		val t = value.asInstanceOf[Font]
 		
-			variable( 'baselineskip, t.baseline )
-			variable( 'spaceskip, t.space )
-			variable( 'cspaceskip, t.cspace )
-			variable( 'xspaceskip, t.xspace )
+			variable( Symbol( "baselineskip" ), t.baseline )
+			variable( Symbol( "spaceskip" ), t.space )
+			variable( Symbol( "cspaceskip" ), t.cspace )
+			variable( Symbol( "xspaceskip" ), t.xspace )
 		}
 		
 		push( pop + (key -> value) )
@@ -81,7 +80,7 @@ class Typesetter
 	
 	def modePop = modeStack.pop
 
-	def in = numberVariable( 'dpi )
+	def in = numberVariable( Symbol( "dpi" ) )
 	
 	def pt = in/72
 	
@@ -169,83 +168,74 @@ class Typesetter
 		else
 			None
 
-	def vbox {vbox( Natural )}
+	def vbox: Unit = vbox( Natural )
 	
-	def vbox( size: Size ) {vbox( size, -1 )}
+	def vbox( size: Size ): Unit = vbox( size, -1 )
 	
-	def vbox( size: Size, baseline: Int )
-	{
+	def vbox( size: Size, baseline: Int ) = {
 		dup
 		modeStack.push( new InternalVerticalMode(size, baseline, this) )
 	}
 	
-	def vtop {vtop( Natural )}
+	def vtop: Unit = vtop( Natural )
 	
-	def vtop( size: Size ) {vbox( Natural, 0 )}
+	def vtop( size: Size ) = vbox( Natural, 0 )
 	
-	def horizontal
-	{
+	def horizontal = {
 		if (!mode.isHorizontal)
 		{
 			if (!mode.asList.empty)
-				vskip( 'parskip )
+				vskip( Symbol( "parskip" ) )
 				
 			modeStack.push( new HorizontalMode(this) )
 		}
 	}
 	
-	def vertical
-	{
+	def vertical = {
 		dup
 		modeStack.push( new VerticalMode(this) )
 	}
 	
-	def hbox {hbox( Natural )}
+	def hbox: Unit = hbox( Natural )
 	
-	def hbox( size: Size )
-	{
+	def hbox( size: Size ) = {
 		dup
 		modeStack.push( new RestrictedHorizontalMode(size, this) )
 	}
 
 	def empty( width: Double, height: Double ) = add( Space(width, height) )
 	
-	def add( e: Item )
-	{
-		mode.add( e )
-	}
+	def add( e: Item ) = mode.add( e )
 
-	def add( l: List[Item] ) {l foreach add}
+	def add( l: List[Item] ): Unit = l foreach add
 	
-	def addHorizontal( e: Item )
-	{
+	def addHorizontal( e: Item ) = {
 		paragraph
 		add( e )
 	}
 	
-	def addVertical( e: Item )
-	{
+	def addVertical( e: Item ) = {
 		par
 		add( e )
 	}
 	
 	def +=( e: Item ) = add( e )
 	
-	def font( t: Font ) = variable( 'font, t )
+	def font( t: Font ) = variable( Symbol( "font" ), t )
 	
-	def font = variable('font).asInstanceOf[Font]
+	def font = variable(Symbol( "font" )).asInstanceOf[Font]
 	
-	def color( c: Color ) = variable( 'color, c )
+	def color( c: Color ) = variable( Symbol( "color" ), c )
 	
-	def color = variable('color).asInstanceOf[Color]
+	def color = variable(Symbol( "color" )).asInstanceOf[Color]
 	
-	def alpha( a: AlphaComposite ) = variable( 'alpha, a )
+	def alpha( a: AlphaComposite ) = variable( Symbol( "alpha" ), a )
 	
-	def alpha = variable('alpha).asInstanceOf[AlphaComposite]
+	def alpha = variable(Symbol( "alpha" )).asInstanceOf[AlphaComposite]
 	
-	def stroke( l: Stroke ) = variable( 'stroke, l )
+	def stroke( l: Stroke ) = variable( Symbol( "stroke" ), l )
 	
-	def stroke = variable('stroke).asInstanceOf[Stroke]
+	def stroke = variable(Symbol( "stroke" )).asInstanceOf[Stroke]
 	
 	def hrule( width: Double, ascent: Double, descent: Double ) = addVertical( new HRule(Some(width), ascent, descent, color, alpha) )
 	
@@ -255,17 +245,17 @@ class Typesetter
 	
 	def vrule( thickness: Double ) = addHorizontal( VRule(this, thickness) )
 	
-	def hskip( key: Symbol ) {hskip( glueVariable(key) )}
+	def hskip( key: Symbol ): Unit = hskip( glueVariable(key) )
 	
 	def hskip( g: Glue ) = addHorizontal( new HSkip(g) )
 	
-	def hskip( width: Double ) {hskip( Glue(width) )}
+	def hskip( width: Double ): Unit = hskip( Glue(width) )
 	
-	def vskip( key: Symbol ) {vskip( glueVariable(key) )}
+	def vskip( key: Symbol ): Unit = vskip( glueVariable(key) )
 	
 	def vskip( g: Glue ) = addVertical( new VSkip(g) )
 	
-	def vskip( height: Double ) {vskip( Glue(height) )}
+	def vskip( height: Double ): Unit = vskip( Glue(height) )
 	
 	def hfil = addHorizontal( new HFil )
 	
@@ -299,19 +289,18 @@ class Typesetter
 		val s = last.asInstanceOf[GlyphBox].s
 	
 			if (s.last == ',' || s.last == ';')
-				hskip( 'cspaceskip )
+				hskip( Symbol( "cspaceskip" ) )
 			else if (Typesetter.XSPACE_PATTERN.matcher( s ).matches && !Typesetter.XSPACE_EXCEPTION_PATTERN.matcher( s ).matches)
-				hskip( 'xspaceskip )
+				hskip( Symbol( "xspaceskip" ) )
 			else
 				interword
 		}
 		else
 			interword
 	
-	def interword = hskip( 'spaceskip )
+	def interword = hskip( Symbol( "spaceskip" ) )
 
-	def text( t: String )
-	{
+	def text( t: String ) = {
 	val words = t.trim.split( "\\s+" )
 	
 		for (i <- 0 until words.length)
@@ -323,16 +312,14 @@ class Typesetter
 		}
 	}
 	
-	def glyph( c: Char )
-	{
+	def glyph( c: Char ) = {
 	val (s, f) = font.segments( c.toString ).head
 	
 		glyphbox( s, f )
 	}
 	
-	def glyphs( s: String, literal: Boolean )
-	{
-	val ligatures = booleanVariable( 'enableligatures )
+	def glyphs( s: String, literal: Boolean ) = {
+	val ligatures = booleanVariable( Symbol( "enableligatures" ) )
 	val monospaced = font.monospaced
 	
 			for ((seg, f) <- font.segments( s ))
@@ -349,8 +336,7 @@ class Typesetter
 	
 	def shift( b: Box, px: Double ) = add( new Shift(b, px) )
 
-	def shift( s: String, px: Double )
-	{
+	def shift( s: String, px: Double ): Unit = {
 		paragraph
 		hbox
 		glyphs( s, false )
@@ -380,8 +366,7 @@ class Typesetter
 	
 	def last = mode.asList.last
 	
-	def list
-	{
+	def list = {
 		dup
 		modeStack.push( new HorizontalListMode(this) )
 	}
@@ -410,8 +395,8 @@ class Typesetter
 		if (mode.isHorizontal)
 		{
 			mode.asHorizontal.par
-			variable( 'hangindent, 0 )
-			variable( 'hangafter, 1 )
+			variable( Symbol( "hangindent" ), 0 )
+			variable( Symbol( "hangafter" ), 1 )
 		}
 	
 	def endParagraph =
@@ -426,13 +411,12 @@ class Typesetter
 		if (mode.isVerticalBoxMode)
 			indent
 	
-	def indent
-	{
+	def indent = {
 		if (mode.isVerticalBoxMode)
 			horizontal
 			
-//		if (booleanVariable('autoindent))
-			hspace( numberVariable('parindent) )
+//		if (booleanVariable(Symbol( "autoindent" )))
+			hspace( numberVariable(Symbol( "parindent" )) )
 	}
 	
 	def accent( s: String, combaccent: String, accentmap: Map[Char, Char] ) = {
@@ -445,8 +429,7 @@ class Typesetter
 		}
 	}
 	
-	def showlast
-	{
+	def showlast = {
 		println( last )
 	}
 	
@@ -454,14 +437,12 @@ class Typesetter
 	// Graphics
 	//
 	
-	def draw( size: Option[(Double, Double)] )
-	{
+	def draw( size: Option[(Double, Double)] ) = {
 		dup
 		modeStack.push( new DrawMode(size, this) )
 	}
 	
-	def path
-	{
+	def path = {
 		dup
 		modeStack.push( new PathMode(this) )
 	}
@@ -478,21 +459,18 @@ class Typesetter
 	// simple format support
 	//
 	
-	def raggedright
-	{
-		variable( 'rightskip, Glue(0) )
-		variable( 'spaceskip, glueVariable('spaceskip).fix )
-		variable( 'cspaceskip, glueVariable('cspaceskip).fix )
-		variable( 'xspaceskip, glueVariable('xspaceskip).fix )
+	def raggedright = {
+		variable( Symbol( "rightskip" ), Glue(0) )
+		variable( Symbol( "spaceskip" ), glueVariable(Symbol( "spaceskip" )).fix )
+		variable( Symbol( "cspaceskip" ), glueVariable(Symbol( "cspaceskip" )).fix )
+		variable( Symbol( "xspaceskip" ), glueVariable(Symbol( "xspaceskip" )).fix )
 	}
 	
-	def hang
-	{
-		variable( 'hangindent, numberVariable('parindent) )
+	def hang = {
+		variable( Symbol( "hangindent" ), numberVariable(Symbol( "parindent" )) )
 	}
 	
-	def textindent( l: List[Item] )
-	{
+	def textindent( l: List[Item] ) = {
 		indent
 		list
 		add( l )
@@ -500,25 +478,22 @@ class Typesetter
 		llap( arg )
 	}
 	
-	def item( l: List[Item] )
-	{
+	def item( l: List[Item] ) = {
 		par
 		hang
 		textindent( l )
 	}
 	
-	def itemitem( l: List[Item] )
-	{
+	def itemitem( l: List[Item] ) = {
 		par
 		indent
-		variable( 'hangindent, 2*numberVariable('parindent) )
+		variable( Symbol( "hangindent" ), 2*numberVariable(Symbol( "parindent" )) )
 		textindent( l )
 	}
 	
-	def line = hbox( To(numberVariable('hsize)) )
+	def line = hbox( To(numberVariable(Symbol("hsize"))) )
 	
-	def centerline( l: List[Item] )
-	{
+	def centerline( l: List[Item] ) = {
 		line
 		hfil
 		add( l )
@@ -526,40 +501,35 @@ class Typesetter
 		end
 	}
 	
-	def leftline( l: List[Item] )
-	{
+	def leftline( l: List[Item] ) = {
 		line
 		add( l )
 		hfil
 		end
 	}
 	
-	def rightline( l: List[Item] )
-	{
+	def rightline( l: List[Item] ) = {
 		line
 		hfil
 		add( l )
 		end
 	}
 	
-	def llap( l: List[Item] )
-	{
+	def llap( l: List[Item] ) = {
 		hbox( To(0) )
 		hss
 		add( l )
 		end
 	}
 
-	def rlap( l: List[Item] )
-	{
+	def rlap( l: List[Item] ) = {
 		hbox( To(0) )
 		add( l )
 		hss
 		end
 	}
 
-	def underline( l: List[Item], downward: Double, thickness: Double )
-	{
+	def underline( l: List[Item], downward: Double, thickness: Double ): Unit = {
 		hbox
 		add( l )
 		kern( -Util.width(l) )
@@ -567,7 +537,7 @@ class Typesetter
 		end
 	}
 
-	def underline( s: String ) {underline( arg(s), 3, 2 )}
+	def underline( s: String ): Unit = underline( arg(s), 3, 2 )
 	
 	def frame( l: List[Item], space: Double, thickness: Double ) =
 		add( HBox( List(
@@ -585,12 +555,11 @@ class Typesetter
 				VRule(this, thickness)
 				)) )
 
-	def frame( s: String, space: Double, thickness: Double ) {frame( arg(s), space, thickness )}
+	def frame( s: String, space: Double, thickness: Double ): Unit = frame( arg(s), space, thickness )
 
-	def frame( s: String ) {frame( s, 3, 1 )}
+	def frame( s: String ): Unit = {frame( s, 3, 1 )}
 	
-	def translucent( b: Box, margin: Double )
-	{
+	def translucent( b: Box, margin: Double ) = {
 		add( new TranslucentBox(b, margin, .5) )
 	}
 	
@@ -722,34 +691,38 @@ object Typesetter
 	val DEFAULT_STROKE = new BasicStroke
 	val DEFAULT_FONT = Font( null, "Serif", "plain", 20 )
 	val DEFAULT_TRANSFORM = new AffineTransform
-	val DEFAULT_VARIABLES = ImmutableHashMap(
-			'baselineskip -> DEFAULT_FONT.baseline,
-			'lineskip -> Glue( 1 ),
-			'lineskiplimit -> 0,
-			'spaceskip -> DEFAULT_FONT.space,
-			'cspaceskip -> DEFAULT_FONT.cspace,
-			'xspaceskip -> DEFAULT_FONT.xspace,
-			'hsize -> 1280,
-			'vsize -> 720,
-			'parindent -> 55,
-			'parfillskip -> FGlue,
-			'leftskip -> ZGlue,
-			'rightskip -> ZGlue,
-			'parskip -> Glue( 0, 1, 0, 0 ),
-			'hangindent -> 0,
-			'hangafter -> 1,
-			'tabskip -> Glue( 20 ),
-			
-			'transform -> DEFAULT_TRANSFORM,
-			'dpi -> 91.5,
-			'font -> DEFAULT_FONT,
-			'color -> Color.BLACK,
-			'alpha -> DEFAULT_ALPHACOMPOSITE,
-			'stroke -> DEFAULT_STROKE,
-			'enableligatures -> true,
-			'autoindent -> true
+	val DEFAULT_VARIABLES = {
+		val pairs = List(
+			"baselineskip" -> DEFAULT_FONT.baseline,
+			"lineskip" -> Glue( 1 ),
+			"lineskiplimit" -> 0,
+			"spaceskip" -> DEFAULT_FONT.space,
+			"cspaceskip" -> DEFAULT_FONT.cspace,
+			"xspaceskip" -> DEFAULT_FONT.xspace,
+			"hsize" -> 1280,
+			"vsize" -> 720,
+			"parindent" -> 55,
+			"parfillskip" -> FGlue,
+			"leftskip" -> ZGlue,
+			"rightskip" -> ZGlue,
+			"parskip" -> Glue( 0, 1, 0, 0 ),
+			"hangindent" -> 0,
+			"hangafter" -> 1,
+			"tabskip" -> Glue( 20 ),
+
+			"transform" -> DEFAULT_TRANSFORM,
+			"dpi" -> 91.5,
+			"font" -> DEFAULT_FONT,
+			"color" -> Color.BLACK,
+			"alpha" -> DEFAULT_ALPHACOMPOSITE,
+			"stroke" -> DEFAULT_STROKE,
+			"enableligatures" -> true,
+			"autoindent" -> true
 		)
-	
+
+		ImmutableHashMap( pairs map {case (k, v) => Symbol(k) -> v}: _* )
+	}
+
 	val LIGATURES = List(
 			"ffi" -> `LATIN SMALL LIGATURE FFI`,
 			"ffl" -> `LATIN SMALL LIGATURE FFL`,
