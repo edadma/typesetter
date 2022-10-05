@@ -1,12 +1,11 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import java.awt.RenderingHints._
-import java.awt.Color._
-import java.awt.Font._
-import java.awt.geom._
-import java.io._
-
-import swing.{Font => SF, _}
+import java.awt.Color.*
+import java.awt.Font.*
+import java.awt.RenderingHints.*
+import java.awt.geom.*
+import java.io.*
+import scala.swing.{Font as SF, *}
 
 
 object TypesetterBoxTest extends MainFrame with App

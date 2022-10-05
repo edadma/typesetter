@@ -1,21 +1,19 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import scala.swing._
-import java.awt.RenderingHints._
-import java.awt.Color._
-import java.awt.Font._
-import java.awt.geom._
-import java.io._
+import java.awt.Color.*
+import java.awt.Font.*
+import java.awt.RenderingHints.*
+import java.awt.geom.*
+import java.io.*
+import scala.swing.*
 
+object TypesetterTest extends MainFrame with App {
+  val t = new Typesetter
 
-object TypesetterTest extends MainFrame with App
-{
-	val t = new Typesetter
-	
-	val fs = System.getProperties.getProperty( "file.separator" )
-	val home = System.getProperties.getProperty( "user.home" )
-	val fonts = home + fs + "Dropbox" + fs + "Typography" + fs + "Fonts" + fs
-	
+  val fs = System.getProperties.getProperty("file.separator")
+  val home = System.getProperties.getProperty("user.home")
+  val fonts = home + fs + "Dropbox" + fs + "Typography" + fs + "Fonts" + fs
+
 //	println( t.dimen("2parindent") )
 //	t.font( Font(null, fonts + "GentiumPlus-1.510" + fs + "GentiumPlus-R.ttf", "plain", 30) )
 
@@ -29,22 +27,22 @@ object TypesetterTest extends MainFrame with App
 // 	t.hbox
 // 	t text "line 2"
 // 	t.end
-	
-	t.vertical
-	t text "framed"
-	t.space
-	t.frame( "text items", 3, 1 )
-	t.space
-	t shift ("is", -5)
-	t.hrule( 10, 0, 5 )
-	t.space
-	t.list
-	t text "/"
-	t.rlap( t.arg )
-	t text "="
-	t.space
-	t.underline( "cool" )
-	t.par
+
+  t.vertical
+  t text "framed"
+  t.space
+  t.frame("text items", 3, 1)
+  t.space
+  t shift ("is", -5)
+  t.hrule(10, 0, 5)
+  t.space
+  t.list
+  t text "/"
+  t.rlap(t.arg)
+  t text "="
+  t.space
+  t.underline("cool")
+  t.par
 //
 //	t text "moved"
 //	t.space
@@ -59,22 +57,22 @@ object TypesetterTest extends MainFrame with App
 //	t.space
 //	t text "wow"
 //	t.par
-//	
+//
 //	t text "rounded"
 //	t.space
 //	t add new ShapeBox( new RoundRectangle2D.Double(0, 0, 50, 25, 20, 20), false, t.color, t.alpha, "Box", 0 )
 //	t.space
 //	t text "rectangle"
 //	t.par
-//	
+//
 //	t vskip 5
 //	t hrule 1
 //	t vskip 5
 
-	t.raggedright
-	t text "This is a very very very very very very very very very very very very very very very very very very very very boring test."
-	t.par
-//	
+  t.raggedright
+  t text "This is a very very very very very very very very very very very very very very very very very very very very boring test."
+  t.par
+//
 //	t.vbox
 //	t.variable( 'hsize, 600 )
 //	t.hbox
@@ -91,22 +89,22 @@ object TypesetterTest extends MainFrame with App
 // 	t text "1."
 // 	t.item( t.arg )
 // 	t text "first item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-// 	
+//
 // 	t.list
 // 	t text "a)"
 // 	t.itemitem( t.arg )
 // 	t text "first sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-// 	
+//
 // 	t.list
 // 	t text "b)"
 // 	t.itemitem( t.arg )
 // 	t text "second sub-item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-// 
+//
 // 	t.list
 // 	t text "2."
 // 	t.item( t.arg )
 // 	t text "second item ljksdfljk fdsjkl fd lkjfdsjkl fd jlkfsdl jkfdsl jkfa ljkfd ljkfds ljkfds jlkf jlkfds jfds"
-// 	
+//
 // 	t text """
 // 			You don't know about me without you have read a book by the name of
 // 			``The Adventures of Tom Sawyer;'' but that ain't no matter. That book
@@ -118,40 +116,38 @@ object TypesetterTest extends MainFrame with App
 // 			that book, which is mostly a true book, with some stretchers, as I
 // 			said before.
 // 		"""
- 	t.par
-	t.vfil
-	
+  t.par
+  t.vfil
+
 //	t.draw( None )
-//	
+//
 //	val path = new Path2D.Double
-//	
+//
 //		path moveTo (0, 0)
 //		path lineTo (10, 10)
 //		path lineTo (20, -10)
-//		
+//
 //	t.string( "0" )
 //	t.string( "0" )
 //	t.string( "org" )
 //	t += new ShapeBox( path, false, t.color, t.alpha, t.stroke, "", 0 )
 //	t.end
-//	
+//
 //	t.rectangle( 50, 50, false )
 //	t.text( "f ff \ufb00" )
-	
-	val p = t box
 
-	contents =
-		new Panel
-		{
-			background = WHITE
-			preferredSize = new Dimension( 1280, 600 )
-			
-			override def paint( g: Graphics2D ) = {
-				super.paint( g )
-				g.setRenderingHint( KEY_ANTIALIASING, VALUE_ANTIALIAS_ON )
-				p.draw( g, 0, 0 )
+  val p = t box
+
+  contents = new Panel {
+    background = WHITE
+    preferredSize = new Dimension(1280, 600)
+
+    override def paint(g: Graphics2D) = {
+      super.paint(g)
+      g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON)
+      p.draw(g, 0, 0)
 //				p.box( g, MARGIN, MARGIN, CYAN )
-			}
-		}
-	visible = true
+    }
+  }
+  visible = true
 }

@@ -1,51 +1,35 @@
 name := "typesetter"
 
-version := "0.6"
+version := "0.0.1"
 
-scalaVersion := "2.13.0"
+scalaVersion := "3.2.0"
 
-scalacOptions ++= Seq( "-deprecation", "-feature", "-language:postfixOps", "-language:implicitConversions", "-language:existentials" )
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-language:postfixOps",
+  "-language:implicitConversions",
+  "-language:existentials",
+)
 
-incOptions := incOptions.value.withNameHashing( true )
-
-organization := "xyz.hyperreal"
+organization := "io.github.edadma"
 
 //resolvers += Resolver.sonatypeRepo( "snapshots" )
 
-resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
-
-resolvers += "Hyperreal Repository" at "https://dl.bintray.com/edadma/maven"
+resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 libraryDependencies ++= Seq(
-	"org.scalatest" %% "scalatest" % "3.0.8" % "test",
-	"org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
+  "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
 )
 
-libraryDependencies ++= Seq(
-	"org.scala-lang.modules" %% "scala-swing" % "2.1.1"
-)
-
-mainClass in (Compile, run) := Some( "xyz.hyperreal." + name.value.replace('-', '_') + ".Main" )
+//mainClass in (Compile, run) := Some("io.github.edadma." + name.value.replace('-', '_') + ".Main")
 
 publishMavenStyle := true
 
-publishArtifact in Test := false
+Test / publishArtifact := false
 
 pomIncludeRepository := { _ => false }
 
 licenses := Seq("ISC" -> url("https://opensource.org/licenses/ISC"))
 
 homepage := Some(url("https://github.com/edadma/" + name.value))
-
-pomExtra :=
-  <scm>
-    <url>git@github.com:edadma/{name.value}.git</url>
-    <connection>scm:git:git@github.com:edadma/{name.value}.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>edadma</id>
-      <name>Edward A. Maxedon, Sr.</name>
-      <url>https://github.com/edadma</url>
-    </developer>
-  </developers>

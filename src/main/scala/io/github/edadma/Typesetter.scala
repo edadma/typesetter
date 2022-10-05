@@ -1,16 +1,15 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import java.awt.{Font => JFont, Color, GraphicsEnvironment, AlphaComposite, Stroke, BasicStroke}
-import java.awt.Font._
+import io.github.edadma.Util.*
+
+import java.awt.Font.*
 import java.awt.font.FontRenderContext
 import java.awt.geom.AffineTransform
-import java.io.{InputStream, FileInputStream}
-import java.util.regex._
-
-import collection.mutable.{ListBuffer, ArrayStack}
-import collection.immutable.{HashMap => ImmutableHashMap}
-
-import Util._
+import java.awt.{AlphaComposite, BasicStroke, Color, GraphicsEnvironment, Stroke, Font as JFont}
+import java.io.{FileInputStream, InputStream}
+import java.util.regex.*
+import scala.collection.immutable.HashMap as ImmutableHashMap
+import scala.collection.mutable.{ArrayStack, ListBuffer}
 
 
 class Typesetter

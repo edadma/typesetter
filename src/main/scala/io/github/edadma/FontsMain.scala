@@ -1,4 +1,4 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
 import java.awt.GraphicsEnvironment
 

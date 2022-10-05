@@ -1,12 +1,11 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import java.awt.{AlphaComposite, Graphics2D, Font => JFont, Color, Shape, BasicStroke, Stroke}
-import java.awt.image.BufferedImage
+import java.awt.Color.*
 import java.awt.font.{GlyphVector, TextLayout}
-import java.awt.geom._
-import java.awt.Color._
-
-import collection.mutable.ListBuffer
+import java.awt.geom.*
+import java.awt.image.BufferedImage
+import java.awt.{AlphaComposite, BasicStroke, Color, Graphics2D, Shape, Stroke, Font as JFont}
+import scala.collection.mutable.ListBuffer
 
 
 trait Item

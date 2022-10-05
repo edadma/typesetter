@@ -1,8 +1,7 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import java.awt.geom._
-
-import collection.mutable.{ListBuffer, ArrayBuffer}
+import java.awt.geom.*
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 
 trait Mode

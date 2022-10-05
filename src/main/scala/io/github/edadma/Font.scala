@@ -1,11 +1,10 @@
-package xyz.hyperreal.typesetter
+package io.github.edadma
 
-import java.awt.{Font => JFont, GraphicsEnvironment}
-import java.awt.Font._
+import java.awt.Font.*
 import java.awt.geom.AffineTransform
+import java.awt.{GraphicsEnvironment, Font as JFont}
 import java.util.regex.Pattern
-
-import collection.mutable.{ListBuffer, HashMap}
+import scala.collection.mutable.{HashMap, ListBuffer}
 
 //trait Style
 //case object PlainStyle extends Style
