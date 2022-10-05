@@ -2,7 +2,7 @@ name := "typesetter"
 
 version := "0.0.1"
 
-scalaVersion := "3.2.0"
+scalaVersion := "3.0.2"
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -13,10 +13,6 @@ scalacOptions ++= Seq(
 )
 
 organization := "io.github.edadma"
-
-//resolvers += Resolver.sonatypeRepo( "snapshots" )
-
-resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
