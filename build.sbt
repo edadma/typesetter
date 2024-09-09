@@ -2,7 +2,7 @@ name := "typesetter"
 
 version := "0.0.1"
 
-scalaVersion := "3.0.2"
+scalaVersion := "3.5.0"
 
 scalacOptions ++= Seq(
   "-deprecation",

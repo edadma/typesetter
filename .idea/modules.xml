@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dev.typesetter.iml" filepath="$PROJECT_DIR$/.idea/modules/dev.typesetter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dev.typesetter.typesetter-build.iml" filepath="$PROJECT_DIR$/.idea/modules/dev.typesetter.typesetter-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/typesetter.iml" filepath="$PROJECT_DIR$/.idea/modules/typesetter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/typesetter-build.iml" filepath="$PROJECT_DIR$/.idea/modules/typesetter-build.iml" />
     </modules>
