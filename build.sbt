@@ -28,14 +28,17 @@ lazy val typesetter = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 //    ),
     libraryDependencies ++= Seq(
 //      "com.github.scopt" %%% "scopt" % "4.1.0",
-//      "com.lihaoyi" %%% "pprint" % "0.9.0" % "test",
+      "com.lihaoyi" %%% "pprint" % "0.9.0", /*% "test"*/
     ),
     publishMavenStyle      := true,
     Test / publishArtifact := false,
     licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
   )
   .jvmSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
+    libraryDependencies ++= Seq(
+      "org.scala-js"           %% "scalajs-stubs" % "1.1.0" % "provided",
+      "org.scala-lang.modules" %% "scala-swing"   % "3.0.0" % "test",
+    ),
   )
   .nativeSettings(
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
