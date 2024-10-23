@@ -64,9 +64,9 @@ object Main extends SimpleSwingApplication:
         t.paragraph()
         t add "[qhTwer"
         t.paragraph()
-        t.addFil()
+        t.fil
         t.end()
-        g.drawImage(t.document.pages.head.asInstanceOf[BufferedImage], null, 0, 0)
+        g.drawImage(t.document.printedPages.head.asInstanceOf[BufferedImage], null, 0, 0)
       }
     }
 
