@@ -1,5 +1,7 @@
 package io.github.edadma.typesetter
 
+import pprint.pprintln
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.compiletime.uninitialized
@@ -8,7 +10,6 @@ import scala.language.postfixOps
 abstract class Typesetter:
 
   var debug: Boolean = false
-  var currentFontXHeight: Double = uninitialized
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("black")
   val converter = UnitConverter(this)
@@ -25,12 +26,17 @@ abstract class Typesetter:
   protected[typesetter] var document: Document = uninitialized
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
-  protected[typesetter] val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
+  /*protected[typesetter]*/
+  val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
-  def init(): Unit
+  def initTarget(): Unit
 
-  def render(box: Box, width: Double, height: Double, xoffset: Double = 0, yoffset: Double = 0): Any
+  def createPageTarget(width: Double, height: Double): Any
+
+  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit
+
+  def ejectPageTarget(): Unit
 
   def getDPI: Double
 
@@ -48,7 +54,7 @@ abstract class Typesetter:
 
   def loadFont(path: String): Any
 
-  def getTextExtents(text: String): TextExtents
+  def getTextExtents(text: String, font: Any): TextExtents
 
   def makeFont(font: Any, size: Double): Any
 
@@ -67,7 +73,7 @@ abstract class Typesetter:
 
   def getDocument: Document = document
 
-  init()
+  initTarget()
 
   loadTypeface(
     "noto",
@@ -112,6 +118,14 @@ abstract class Typesetter:
     "Bold",
     "Italic",
     ("Bold", "Italic"),
+  )
+  loadTypeface(
+    "charm",
+    "fonts/Charm/Charm",
+    Ligatures.ALL,
+    Set(),
+    "Regular",
+    "Bold",
   )
 
   private val gentiumbookMissing = Set(
@@ -211,14 +225,14 @@ abstract class Typesetter:
     "Regular",
   )
 
-  currentFont = makeFont("gentiumbook", 24, Set("regular"))
+  selectFont("gentiumbook", 18, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
   modeStack push new PageMode(this)
 
   def mode: Mode = modeStack.top
 
-  def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
+  def setFont(f: Font): Unit = setFont(f.renderFont)
 
   def in: Double = getDPI
 
@@ -226,13 +240,15 @@ abstract class Typesetter:
 
   def cm: Double = in / 2.54
 
-  def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
+  def mm: Double = cm / 10
 
-  def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
+  infix def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
-  def getNumber(name: String): Double = get(name).asInstanceOf[Double]
+  infix def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
 
-  def set(name: String, value: Double | Glue): Unit = scopes(0) += (name -> value)
+  infix def getNumber(name: String): Double = get(name).asInstanceOf[Double]
+
+  def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
 
   def set(pairs: Seq[(String, Any)]): Unit =
     scopes(0) ++=
@@ -243,7 +259,13 @@ abstract class Typesetter:
 
   def enter(): Unit = scopes push scopes.top
 
-  def exit(): Unit = scopes.pop
+  def exit(): Unit =
+    scopes.pop
+
+    scopes.top get "font" match
+      case Some(font: Font) => currentFont = font
+      case Some(o)          => sys.error(s"font object has wrong type: '${o.getClass}'")
+      case None             =>
 
   def italic(): Unit = addStyle("italic")
 
@@ -258,6 +280,8 @@ abstract class Typesetter:
   def nosmallcaps(): Unit = removeStyle("smallcaps")
 
   def setStyle(style: Set[String]): Font = selectFont(currentFont.typeface, currentFont.size, style)
+
+  def typeface(name: String): Font = selectFont(name, currentFont.size, Set.empty)
 
   def setStyle(style: String*): Font = setStyle(style.toSet)
 
@@ -304,10 +328,17 @@ abstract class Typesetter:
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
 
-  def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
+  def selectFont(typeface: String, size: Double, style: String*): Font = selectFont(typeface, size, style.toSet)
 
-  def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
-    currentFont = makeFont(family, size, styleSet)
+  def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
+    val f = makeFont(typeface, size, styleSet)
+
+    if f != currentFont then
+      if scopes.size > 1 && !scopes(1).contains("font") then scopes(1) += ("font" -> currentFont)
+
+      currentFont = f
+      set("baselineskip", Glue(f.size))
+
     currentFont
 
   def makeFont(typeface: String, size: Double, styleSet: Set[String]): Font =
@@ -323,7 +354,16 @@ abstract class Typesetter:
           )
         val derivedFont = makeFont(font, size)
 
-        Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
+        Font(
+          typeface,
+          size,
+          charWidth(derivedFont, ' '),
+          getTextExtents("x", derivedFont).height,
+          styleSet,
+          derivedFont,
+          baseline,
+          ligatures,
+        )
 
   infix def add(text: String): Typesetter = add(charBox(text))
 
@@ -337,10 +377,12 @@ abstract class Typesetter:
     mode add box
     this
 
-  infix def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
+  def glue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
     add(Glue(naturalWidth, stretch, shrink))
 
-  infix def addFil(): Typesetter = add(FilGlue)
+  def fil: Typesetter = add(FilGlue)
+
+  def fill: Typesetter = add(FillGlue)
 
   def noBreakSpace: Typesetter = add(getGlue("spaceskip").noBreak)
 
@@ -352,15 +394,26 @@ abstract class Typesetter:
     modeStack push new HBoxBuilder(this, toSize)
     this
 
+  def image(path: String): Typesetter =
+    add(new ImageBox(this, path))
+    this
+
   def done(): Unit =
     mode.done()
+
+  def newpage(): Unit =
+    paragraph()
+    mode match
+      case p: PageMode => p.newpage()
+      case _           =>
 
   def paragraph(): Unit =
     mode match
       case p: ParagraphMode => p.done()
       case _                =>
 
-  def end(): Unit = while modeStack.nonEmpty do done()
+  def end(): Unit =
+    while modeStack.nonEmpty do done()
 
   def start(): Unit =
     mode match
@@ -369,16 +422,23 @@ abstract class Typesetter:
 
         modeStack push paragraphMode
 
-        if indentParagraph /*&& !firstParagraph*/ then paragraphMode add HSpaceBox(getNumber("parindent"))
-//        else firstParagraph = false
+        if indentParagraph then paragraphMode add HSpaceBox(getNumber("parindent"))
       case _ =>
+
+  def indent(): Unit =
+    indentParagraph = true
+    start()
+
+  def noindent(): Unit =
+    indentParagraph = false
+    start()
 
   private def defaultParameters =
     List(
       "baselineskip" -> Glue(
-        currentFont.size
-        /** 1.2 */
-          * pt,
+        currentFont.size,
+          /** 1.2 */
+//          * pt,
       ),
       "lineskip" -> Glue(1 * pt),
       "lineskiplimit" -> 0.0,

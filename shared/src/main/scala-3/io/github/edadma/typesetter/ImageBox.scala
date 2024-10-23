@@ -1,7 +1,7 @@
 package io.github.edadma.typesetter
 
 class ImageBox(t: Typesetter, path: String, scaledWidth: Option[Double] = None, scaledHeight: Option[Double] = None)
-    extends ContentBox:
+    extends NoGlueBox:
   private val (image, imageWidth, imageHeight) = t.loadImage(path)
   private val imageScaling = t.getNumber("imageScaling")
 

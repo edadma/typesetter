@@ -5,23 +5,21 @@ import scala.compiletime.uninitialized
 
 abstract class Document extends Mode:
   private[typesetter] var ts: Typesetter = uninitialized
-  val pages = new ArrayBuffer[Any]
+  val printedPages = new ArrayBuffer[Any]
+  var page: Int = 0
+  var eject: Boolean = false
 
   def t: Typesetter = ts
 
   def init(): Unit
 
-  def page(b: Box): Box
+  def layout(b: Box): Box
 
-  infix def add(box: Box): Unit =
-    pages += t.render(
-      page(box),
-      t.getNumber("pagewidth"),
-      t.getNumber("pageheight"),
-      t.getNumber("hoffset"),
-      t.getNumber("voffset"),
-    )
+  infix def add(box: Box): Unit
 
-  override def done(): Unit = pop
+  override def done(): Unit =
+    pop
+
+    if eject then t.ejectPageTarget()
 
   def result: Box = ???

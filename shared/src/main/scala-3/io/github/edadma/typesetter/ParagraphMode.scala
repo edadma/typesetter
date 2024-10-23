@@ -8,6 +8,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =
+    val hsize = t.getNumber("hsize")
     var first = true
 
     while boxes.nonEmpty do
@@ -16,9 +17,12 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.size + boxes.head.width <= t.getNumber("hsize") then
+          if hbox.size + boxes.head.width <= hsize then
             hbox add boxes.remove(0)
             line()
+          else if boxes.head.width > hsize then
+            println(s"Warning: overflow: ${boxes.head}")
+            hbox add boxes.remove(0)
           else
             boxes.head match
               case b: CharBox =>
