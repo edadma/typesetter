@@ -42,6 +42,11 @@ lazy val typesetter = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   )
   .nativeSettings(
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
+    libraryDependencies ++= Seq(
+      "com.github.scopt" %%% "scopt"    % "4.1.0",
+      "io.github.edadma" %%% "libcairo" % "0.0.7",
+      "io.github.edadma" %%% "freetype" % "0.0.4",
+    ),
   )
   .jsSettings(
     jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
