@@ -27,7 +27,7 @@ class TestFoldedDocument extends Document:
       printedPages += t.createPageTarget(t.getNumber("paperwidth"), t.getNumber("paperheight"))
       eject = true
 
-    t.renderToTarget(
+    t.draw(
       layout(box),
       fold * width + t.getNumber("hoffset"),
       t.getNumber("voffset"),

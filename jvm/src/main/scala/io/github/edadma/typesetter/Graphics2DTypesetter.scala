@@ -9,8 +9,8 @@ import scala.compiletime.uninitialized
 
 class Graphics2DTypesetter extends Typesetter:
 
-  private var page: BufferedImage = uninitialized
-  private var g: Graphics2D = uninitialized
+  private var page: BufferedImage    = uninitialized
+  private var g: Graphics2D          = uninitialized
   private var frc: FontRenderContext = uninitialized
 
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
@@ -33,9 +33,6 @@ class Graphics2DTypesetter extends Typesetter:
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
     page
-
-  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit =
-    box.draw(this, xoffset, yoffset + box.ascent)
 
   def ejectPageTarget(): Unit = ()
 
@@ -70,8 +67,8 @@ class Graphics2DTypesetter extends Typesetter:
 
     val ascent = -bounds.getY
 //    val descent = layout.getDescent
-    val width = bounds.getWidth
-    val height = bounds.getHeight
+    val width   = bounds.getWidth
+    val height  = bounds.getHeight
     val advance = layout.getAdvance
 
     TextExtents(

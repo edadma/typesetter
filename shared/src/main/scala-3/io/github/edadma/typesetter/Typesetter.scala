@@ -9,12 +9,12 @@ import scala.language.postfixOps
 
 abstract class Typesetter:
 
-  var debug: Boolean = false
-  var currentFont: Font = uninitialized
-  var currentColor: Color = Color("black")
-  val converter = UnitConverter(this)
-  val pages = new ArrayBuffer[Any]
-  var ligatures: Boolean = true
+  var debug: Boolean           = false
+  var currentFont: Font        = uninitialized
+  var currentColor: Color      = Color("black")
+  val converter                = UnitConverter(this)
+  val pages                    = new ArrayBuffer[Any]
+  var ligatures: Boolean       = true
   var representations: Boolean = true
 
   case class Typeface(
@@ -24,17 +24,17 @@ abstract class Typesetter:
   )
 
   protected[typesetter] var document: Document = uninitialized
-  protected val typefaces = new mutable.HashMap[String, Typeface]
-  protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
+  protected val typefaces                      = new mutable.HashMap[String, Typeface]
+  private val scopes                           = mutable.Stack[Map[String, Any]](Map.empty)
   /*protected[typesetter]*/
-  val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
+  protected[typesetter] val modeStack: mutable.Stack[Mode] = mutable.Stack(null) // gets set by setDocument
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   def initTarget(): Unit
 
-  def createPageTarget(width: Double, height: Double): Any
+  def createPageTarget(path: String, width: Double, height: Double): Any
 
-  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit
+  def draw(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit = box.draw(this, xoffset, yoffset + box.ascent)
 
   def ejectPageTarget(): Unit
 
@@ -440,28 +440,28 @@ abstract class Typesetter:
           /** 1.2 */
 //          * pt,
       ),
-      "lineskip" -> Glue(1 * pt),
+      "lineskip"      -> Glue(1 * pt),
       "lineskiplimit" -> 0.0,
-      "spaceskip" -> Glue(currentFont.space, 1),
-      "xspaceskip" -> Glue(currentFont.space * 1.5, 1),
-      "hsize" -> 6.5 * in,
-      "vsize" -> 9 * in,
-      "parindent" -> in / 2,
-      "parfillskip" -> FilGlue,
-      "leftskip" -> ZeroGlue,
-      "rightskip" -> ZeroGlue,
-      "parskip" -> FilGlue,
-      "hangindent" -> 0.0,
-      "hangafter" -> 1.0,
-      "hoffset" -> 1 * in,
-      "voffset" -> 1 * in,
+      "spaceskip"     -> Glue(currentFont.space, 1),
+      "xspaceskip"    -> Glue(currentFont.space * 1.5, 1),
+      "hsize"         -> 6.5 * in,
+      "vsize"         -> 9 * in,
+      "parindent"     -> in / 2,
+      "parfillskip"   -> FilGlue,
+      "leftskip"      -> ZeroGlue,
+      "rightskip"     -> ZeroGlue,
+      "parskip"       -> FilGlue,
+      "hangindent"    -> 0.0,
+      "hangafter"     -> 1.0,
+      "hoffset"       -> 1 * in,
+      "voffset"       -> 1 * in,
 
       //
       "imageScaling" -> 1.0,
-      "pagewidth" -> 8.5 * in,
-      "pageheight" -> 11 * in,
-      "paperwidth" -> 8.5 * in,
-      "paperheight" -> 11 * in,
+      "pagewidth"    -> 8.5 * in,
+      "pageheight"   -> 11 * in,
+      "paperwidth"   -> 8.5 * in,
+      "paperheight"  -> 11 * in,
     )
 
 end Typesetter

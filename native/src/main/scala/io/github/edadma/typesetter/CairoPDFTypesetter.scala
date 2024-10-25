@@ -13,40 +13,25 @@ import io.github.edadma.libcairo.{
   imageSurfaceCreate,
   pdfSurfaceCreate,
 }
-import java.io.File
-import javax.imageio.ImageIO
 import scala.compiletime.uninitialized
 
 class CairoPDFTypesetter extends Typesetter:
 
-  private var surface: BufferedImage = uninitialized
+  private var surface: Surface = uninitialized
+  private var ctx: Context     = uninitialized
 
-  def initTarget(): Unit =
-    page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
-    g = page.createGraphics()
-    frc = g.getFontRenderContext
+  def initTarget(): Unit = ()
 
-  def createPageTarget(width: Double, height: Double): Any =
-    page = new BufferedImage(
-      width.toInt,
-      height.toInt,
-      BufferedImage.TYPE_INT_ARGB,
-    )
-    g = page.createGraphics()
-    g.setColor(java.awt.Color.WHITE)
-    g.fillRect(0, 0, page.getWidth, page.getHeight)
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
-    page
+  def createPageTarget(path: String, width: Double, height: Double): Any =
+    if surface eq null then
+      surface = pdfSurfaceCreate(path, width, height)
+      ctx = surface.create
 
-  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit =
-    box.draw(this, xoffset, yoffset + box.ascent)
-
-  def ejectPageTarget(): Unit = ()
+  def ejectPageTarget(): Unit = ctx.showPage()
 
   def getDPI: Double = 72
 
-  def setFont(font: Any): Unit = g.setFont(font.asInstanceOf[JFont])
+  def setFont(font: Any): Unit = ctx.setFontFace(font.asInstanceOf[FontFace])
 
   def setColor(color: Color): Unit =
     g.setColor(new java.awt.Color(color.redInt, color.greenInt, color.blueInt, color.alphaInt))
