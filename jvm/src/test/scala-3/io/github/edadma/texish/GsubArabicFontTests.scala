@@ -175,3 +175,23 @@ class GsubArabicFontTests extends AnyFreeSpec with Matchers:
     g(0x064e) shouldBe 380                       // …and the fatha
   }
 
+
+  "a word-final kaf keeps its own shape and is not confused with lam" in {
+    // Kaf and lam are dual-joining letters whose final forms are close in outline: both a stroke rising from
+    // the baseline bowl, distinguished by the small hamza-like stroke kaf carries. Selecting the wrong one
+    // silently changes the word -- and in Arabic and Persian the second-person suffix is a final kaf, so the
+    // confusion falls on almost every sentence addressed to a reader.
+    val kaf = 0x0643
+    val lam = 0x0644
+    ArabicShaping.joiningType(kaf) shouldBe 'D'
+    ArabicShaping.joiningType(lam) shouldBe 'D'
+
+    // The same word but for its last letter. If the final forms were interchanged the two would shape alike.
+    val withKaf = shapeOrdered("اسمك")
+    val withLam = shapeOrdered("اسمل")
+    withKaf should not be withLam
+    withKaf.init shouldBe withLam.init // they differ only in that last letter
+
+    // And the final form must differ from the isolated one, which is the substitution being exercised.
+    withKaf.last should not be g(kaf)
+  }
