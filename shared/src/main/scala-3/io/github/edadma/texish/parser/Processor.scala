@@ -359,7 +359,13 @@ class Processor(val handler: Handler):
   def readMacroArgs(params: Vector[MacroParam], pos: CharReader): Map[String, Vector[Token]] =
     params.map { p =>
       val tokens = p.kind match
-        case ParamKind.Mandatory       => readArgument(pos)
+        // A braced argument arrives WITHOUT its outer braces, as in TeX: the braces delimit the argument, they do
+        // not scope it. Kept, they turned every substituted body into a group of its own, so a setting made inside
+        // the argument was reverted at the argument's closing brace -- before a paragraph the body was still in the
+        // middle of had been broken. `\def f body {\vbox{\body}}` then let `\set baselineskip` govern every
+        // paragraph of the body but its last. readArgument always returns one balanced group, so stripping the
+        // first and last tokens is exact. A macro that wants its argument scoped writes the braces itself.
+        case ParamKind.Mandatory       => stripOuterBraces(readArgument(pos))
         case ParamKind.Optional(deflt) => readOptionalArg(pos).getOrElse(deflt)
         case ParamKind.Star            => readStarFlag(pos)
         case ParamKind.Raw             => Vector(Token.Text(readRawArgument(pos), pos))

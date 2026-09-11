@@ -223,6 +223,13 @@
 // Segond marks its per-passage cross-references with italic letters a, b, c — and does not touch the counter.
 \def usfmfootnote c b {\if {\= {\c} {+}}\footnote{\font \usfmfamily 8 regular\b}\else\footnote[\italic{\c}]{\font \usfmfamily 8 regular\b}\fi}
 \def usfmxref c b {\if {\= {\c} {+}}\footnote{\font \usfmfamily 8 regular\b}\else\footnote[\italic{\c}]{\font \usfmfamily 8 regular\b}\fi}
+// usfmfr and usfmxo hand their parameter to \bold UNBRACED, and that is deliberate. The reader passes the
+// reference WITH the separating space the source put after it ("2:17 "). \bold reads the unbraced reference
+// and consumes the whitespace after it, and the macro supplies one roman space of its own -- so the result is a
+// bold reference and exactly one space, whether or not the source had a space there. Bracing the parameter,
+// \bold{\t}, would set the source's space inside the bold and then add the macro's, for two; dropping the
+// macro's space instead would fuse the reference to the note when a source omits it. The cost of the unbraced
+// form: a reference containing a space ("2:17, 19") bolds only up to that space.
 \def usfmfr t {{\bold \t} }
 \def usfmft t {\t}
 \def usfmfq t {\italic{\t}}

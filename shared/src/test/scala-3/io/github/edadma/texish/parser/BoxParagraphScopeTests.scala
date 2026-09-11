@@ -82,3 +82,45 @@ class BoxParagraphScopeTests extends AnyFreeSpec with Matchers:
     proc.process("\\set hsize {60} \\set baselineskip {12} \\setbox b \\hbox{AB} \\set w {\\wd b}")
     proc.handler.get("w") shouldBe Value.Dimen(12.0)
   }
+
+  // ---- the same guarantee when the body arrives as a macro argument ----
+  //
+  // A package passes a body into a box through a parameter: `\def f body {\vbox{\body}}`. Arguments used to
+  // keep their braces, so the substituted body was a group of its own and a setting inside it was reverted at
+  // that inner brace -- before the box's last paragraph was broken, so the box-level fix above could not reach
+  // it. Arguments now arrive without their outer braces, as in TeX, and the setting lands in the box's scope.
+
+  "a setting inside a macro-argument body governs the box's last paragraph" in {
+    val proc = fixture()
+    proc.process(
+      s"""\\set hsize {60} \\set baselineskip {12}
+         |\\setbox literal \\vbox{\\set baselineskip {40} $body
+         |
+         |$body}
+         |\\def probe body {\\setbox viaarg \\vbox{\\body}}
+         |\\probe{\\set baselineskip {40} $body
+         |
+         |$body}
+         |\\set hl {\\ht literal} \\set ha {\\ht viaarg}""".stripMargin,
+    )
+    // The literal box and the one built from a macro argument must agree exactly.
+    proc.handler.get("ha") shouldBe proc.handler.get("hl")
+  }
+
+  "a braced argument is delimited, not scoped -- an assignment in it outlives the call, as in TeX" in {
+    val proc = fixture()
+    proc.process("\\set one {1} \\set mark {0} \\def run x {\\x} \\run{\\set mark {1}} \\set seen {\\mark}")
+    proc.handler.get("seen") shouldBe proc.handler.get("one")
+  }
+
+  "a macro that wants its argument scoped still gets it by writing the braces itself" in {
+    val proc = fixture()
+    proc.process("\\set zero {0} \\set mark {0} \\def run x {{\\x}} \\run{\\set mark {1}} \\set seen {\\mark}")
+    proc.handler.get("seen") shouldBe proc.handler.get("zero")
+  }
+
+  "a multi-token argument still reaches a primitive whole when the body braces it" in {
+    val proc = fixture()
+    proc.process("\\setbox direct \\hbox{AB CD} \\def w x {\\setbox viaarg \\hbox{\\x}} \\w{AB CD} \\set wd {\\wd direct} \\set wa {\\wd viaarg}")
+    proc.handler.get("wa") shouldBe proc.handler.get("wd")
+  }
